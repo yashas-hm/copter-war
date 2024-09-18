@@ -6,6 +6,7 @@ window.onload = () => {
     if (canvas.getContext) {
         const ctx = canvas.getContext("2d");
         const copter = new Helicopter(ctx, 300, 700);
+        const maxFPS = 70;
         let cacti = [];
         let fps = 0;
         let framesPerSec = 0;
@@ -18,13 +19,6 @@ window.onload = () => {
             1000
         );
         let spawnInterval;
-
-        // setInterval(function () {
-        //     setTimeout(function () {
-        //
-        //         }, getRandom(100, 400)
-        //     );
-        // }, 500);
 
         function getRandom(min, max) {
             const minCeil = Math.ceil(min);
@@ -88,47 +82,18 @@ window.onload = () => {
             }
         }
 
-        function main() {
+        function mainLoop() {
             resetGameWindow();
             spawnCacti();
             drawCactus();
             drawPlayer();
-            requestAnimationFrame(main);
+
+            // Control Game FPS
+            setTimeout(function() {
+                mainLoop();
+            }, 1000/maxFPS);
         }
 
-        requestAnimationFrame(main);
+        requestAnimationFrame(mainLoop);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
