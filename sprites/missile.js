@@ -6,5 +6,5 @@ Missile.prototype.draw = function () {
 
 }
 Missile.prototype.update = function () {
-    
+
 }

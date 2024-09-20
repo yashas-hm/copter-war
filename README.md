@@ -10,6 +10,7 @@ Check out the game in action!
 [Copter War](https://yashas-hm.github.io/copter-war/)
 
 #### Just Basic Demo still lots to add
+
 ![ScreenRecording2024-09-13at1 42 16PM-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/bb6b63c5-f354-4808-81a1-b230a60768c0)
 
 ## Features
@@ -38,10 +39,13 @@ The game uses the **HTML Canvas** for rendering and **JavaScript** for logic, ut
   classes.
 - **Random Spawning**: Cacti are spawned randomly on the canvas to create a dynamic desert environment.
 - **Game Loop**: A continuous loop that updates the game state and redraws the game canvas at a fixed interval.
+
 #### TODO
+
 - **Event Handling**: Controls for the player helicopter using keyboard events for movement and shooting.
 
 ## TODO
+
 ## Controls
 
 - **Arrow Keys**: Move the helicopter up, down, left, and right.

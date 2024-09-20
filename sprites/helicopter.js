@@ -45,15 +45,15 @@ Helicopter.prototype.update = function (delta, input) {
         if (this.scale <= 0.4) {
             return -1;
         }
-        if (this.isEnemy){
+        if (this.isEnemy) {
             this.y += this.velocity / 2 * delta;
             if (this.y > canvas.height + 100) {
                 return -1;
-            }    
-        }else{
+            }
+        } else {
             this.y -= this.velocity / 2 * delta;
         }
-        
+
     } else {
         this.propellerAngle += this.propellerSpeed * delta;
         if (this.isEnemy) {
@@ -63,26 +63,26 @@ Helicopter.prototype.update = function (delta, input) {
             }
         } else {
             if (input.ArrowUp) {
-                if (this.y>=canvas.height/5){
-                    this.y -= this.velocity / 1.3 * delta;   
+                if (this.y >= canvas.height / 5) {
+                    this.y -= this.velocity / 1.3 * delta;
                 }
             }
 
             if (input.ArrowDown) {
-                if (this.y<=canvas.height-60){
-                    this.y += this.velocity / 1.3 * delta;   
+                if (this.y <= canvas.height - 60) {
+                    this.y += this.velocity / 1.3 * delta;
                 }
             }
-            
+
             if (input.ArrowRight) {
-                if (this.x<=canvas.width-60) {
+                if (this.x <= canvas.width - 60) {
                     this.x += this.velocity / 1.3 * delta;
                 }
             }
-            
+
             if (input.ArrowLeft) {
-                if (this.x>=60){
-                    this.x -= this.velocity / 1.3 * delta;   
+                if (this.x >= 60) {
+                    this.x -= this.velocity / 1.3 * delta;
                 }
             }
         }
@@ -96,8 +96,8 @@ Helicopter.prototype.ratio = function (value) {
 
 Helicopter.prototype.drawBody = function (primaryColor, secondaryColor) {
 
-    if (this.isEnemy){
-        this.canvas.rotate(180 * Math.PI / 4);    
+    if (this.isEnemy) {
+        this.canvas.rotate(180 * Math.PI / 4);
     }
 
     // Below Cockpit
