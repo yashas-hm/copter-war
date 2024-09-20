@@ -1,23 +1,21 @@
-import {playerPri, playerSec, enemyPri, enemySec,borderWhite,borderBlack} from "../constants/colors.js"
+import {borderBlack, borderWhite, enemyPri, enemySec, playerPri, playerSec} from "../constants/colors.js"
 
 export function Helicopter(
     canvas, x = 0,
     y = 0,
     scale = 1,
     isEnemy = false,
-    angle = 0,
     propellerSpeed = 0.1
 ) {
     this.canvas = canvas;
     this.scale = scale;
     this.isEnemy = isEnemy;
-    this.angle = angle;
     this.propellerSpeed = propellerSpeed;
     this.propellerAngle = 0;
     this.x = x;
     this.y = y;
     this.hit = false;
-    this.velocity = 2.5;
+    this.velocity = 0.2;
 }
 
 Helicopter.prototype.draw = function () {
@@ -39,40 +37,57 @@ Helicopter.prototype.draw = function () {
     this.canvas.restore();
 };
 
-Helicopter.prototype.update = function () {
-    // Update based on user actions and if hit
+Helicopter.prototype.update = function (delta, input) {
     const canvas = document.getElementById("canvas");
-    this.propellerAngle += this.propellerSpeed;
-    if (this.angle === 0) {
-        this.y -= this.velocity;
-        if (this.y < -200) {
-            this.angle = 90;
-            this.x = 0;
-            this.y = canvas.height / 2;
+
+    if (this.hit) {
+        this.scale -= this.velocity / 2 * delta;
+        if (this.scale <= 0.4) {
+            return -1;
         }
-    } else if (this.angle === 90) {
-        this.x += this.velocity;
-        if (this.x > canvas.width + 200) {
-            this.angle = 180;
-            this.x = canvas.width / 2;
-            this.y = 0;
+        if (this.isEnemy){
+            this.y += this.velocity / 2 * delta;
+            if (this.y > canvas.height + 100) {
+                return -1;
+            }    
+        }else{
+            this.y -= this.velocity / 2 * delta;
         }
-    } else if (this.angle === 180) {
-        this.y += this.velocity;
-        if (this.y > canvas.height + 200) {
-            this.angle = 270;
-            this.x = canvas.width;
-            this.y = canvas.height / 2;
-        }
-    } else if (this.angle === 270) {
-        this.x -= this.velocity;
-        if (this.x < -200) {
-            this.angle = 0;
-            this.x = canvas.width / 2;
-            this.y = canvas.height;
+        
+    } else {
+        this.propellerAngle += this.propellerSpeed * delta;
+        if (this.isEnemy) {
+            this.y += this.velocity * delta;
+            if (this.y > canvas.height + 100) {
+                return -1;
+            }
+        } else {
+            if (input.ArrowUp) {
+                if (this.y>=canvas.height/5){
+                    this.y -= this.velocity / 1.3 * delta;   
+                }
+            }
+
+            if (input.ArrowDown) {
+                if (this.y<=canvas.height-60){
+                    this.y += this.velocity / 1.3 * delta;   
+                }
+            }
+            
+            if (input.ArrowRight) {
+                if (this.x<=canvas.width-60) {
+                    this.x += this.velocity / 1.3 * delta;
+                }
+            }
+            
+            if (input.ArrowLeft) {
+                if (this.x>=60){
+                    this.x -= this.velocity / 1.3 * delta;   
+                }
+            }
         }
     }
-    return this.angle;
+    return null;
 }
 
 Helicopter.prototype.ratio = function (value) {
@@ -81,7 +96,9 @@ Helicopter.prototype.ratio = function (value) {
 
 Helicopter.prototype.drawBody = function (primaryColor, secondaryColor) {
 
-    this.canvas.rotate(this.angle * Math.PI / 4);
+    if (this.isEnemy){
+        this.canvas.rotate(180 * Math.PI / 4);    
+    }
 
     // Below Cockpit
     this.canvas.strokeStyle = borderWhite;

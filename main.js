@@ -1,99 +1,159 @@
 import {Helicopter} from "./sprites/helicopter.js";
 import {Cactus} from "./sprites/cactus.js";
 
-window.onload = () => {
-    const canvas = document.getElementById("canvas");
-    if (canvas.getContext) {
-        const ctx = canvas.getContext("2d");
-        const copter = new Helicopter(ctx, 300, 700);
-        const maxFPS = 70;
-        let cacti = [];
-        let fps = 0;
-        let framesPerSec = 0;
-        let copterAngle = 0;
-        let previousAngle = 90;
-        setInterval(function () {
-                fps = framesPerSec;
-                framesPerSec = 0;
+const maxFPS = 70;
+const keyInputs = {};
+let cacti = [];
+let enemies = [];
+let framesPerSecond = 0
+let fps = 0;
+
+// Process Inputs
+window.addEventListener("keydown", function (event) {
+    if (event.defaultPrevented) return;
+    keyInputs[event.key] = true;
+    event.preventDefault();
+}, true);
+
+window.addEventListener("keyup", function (event) {
+    if (event.defaultPrevented) return;
+    keyInputs[event.key] = false;
+    event.preventDefault();
+}, true)
+
+function getRandom(min, max) {
+    const minCeil = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeil + 1) + minCeil);
+}
+
+class PlayerObject {
+    constructor(context) {
+        this.context = context;
+        this.player = new Helicopter(context, 300, 700, 0.8);
+    }
+
+    update(delta, input) {
+        this.player.update(delta, input);
+        this.player.draw();
+    }
+
+}
+
+class EnemyObject {
+    constructor(context, canvas) {
+        this.context = context;
+        this.enemySpawnInterval = setInterval(
+            function () {
+                if (enemies.length<3){
+                    setTimeout(function () {
+                        enemies.push(new Helicopter(context, getRandom(60, canvas.width-60), -60, 0.65, true));
+                    }, getRandom(300, 800));
+                }
             },
             1000
         );
-        let spawnInterval;
-
-        function getRandom(min, max) {
-            const minCeil = Math.ceil(min);
-            const maxFloored = Math.floor(max);
-            return Math.floor(Math.random() * (maxFloored - minCeil + 1) + minCeil);
-        }
-
-        function resetGameWindow() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#efb884";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#1c1c1c";
-            ctx.font = "24px serif";
-            ctx.fillText("Score: 0", 10, 30);
-            ctx.fillText("FPS: " + fps, 10, 60);
-            ++framesPerSec;
-        }
-
-        function drawPlayer() {
-            const result = copter.update();
-            if (result != null) {
-                copterAngle = result;
+    }
+    
+    update(delta){
+        for (let enemy of enemies){
+            const result = enemy.update(delta);
+            if (result!=null && result ===-1){
+                enemies = enemies.slice(1, enemies.length);
+                continue;
             }
-            copter.draw();
+            enemy.draw();
         }
+    }
+}
 
-        function drawCactus() {
-            for (let cactus of cacti) {
-                const result = cactus.update(copterAngle);
-                if (result != null && result === -1) {
-                    cacti = cacti.slice(1, cacti.length);
-                    continue;
-                }
-                cactus.draw();
+class CactusObject {
+    constructor(context, canvas) {
+        this.context = context;
+        this.cactusSpawnInterval = setInterval(
+            function () {
+                setTimeout(function () {
+                    cacti.push(new Cactus(context, getRandom(0, canvas.width), -60, 0.6));
+                }, getRandom(300, 400));
+            },
+            500
+        );
+    }
+
+    update(delta) {
+        for (let cactus of cacti) {
+            const result = cactus.update(delta);
+            if (result != null && result === -1) {
+                cacti = cacti.slice(1, cacti.length);
+                continue;
             }
+            cactus.draw();
         }
+    }
+}
 
-        function spawnCacti() {
-            if (previousAngle !== copterAngle) {
-                previousAngle = copterAngle;
-                if (spawnInterval != null || spawnInterval !== undefined) {
-                    clearInterval(spawnInterval);
-                }
+class GameObject {
+    constructor(context) {
+        this.lastFrameTimeMs = 0;
+        this.delta = 0;
+        this.score = 0;
+        this.context = context;
+    }
 
-                spawnInterval = setInterval(
-                    function (){
-                        setTimeout(function (){
-                            if (copterAngle===0){
-                                cacti.push(new Cactus(ctx, getRandom(0, canvas.width), -60),);
-                            }else if (copterAngle===90){
-                                cacti.push(new Cactus(ctx, canvas.width+60, getRandom(0, canvas.height-30)),);
-                            }else if (copterAngle===180){
-                                cacti.push(new Cactus(ctx, getRandom(0, canvas.width), canvas.height+60),);
-                            }else if (copterAngle===270){
-                                cacti.push(new Cactus(ctx, -60, getRandom(0, canvas.height-30)),);
-                            }
-                        }, getRandom(300,400));
-                    },
-                    500
-                );
+    resetGameWindow(canvas) {
+        this.context.clearRect(0, 0, canvas.width, canvas.height);
+        this.context.fillStyle = "#efb884";
+        this.context.fillRect(0, 0, canvas.width, canvas.height);
+        this.context.fillStyle = "#1c1c1c";
+        this.context.font = "24px serif";
+        this.context.fillText(`Score: ${this.score}`, 10, 30);
+        this.context.fillText(`FPS: ${fps}`, 10, 60);
+        framesPerSecond+=1;
+    }
+
+    gameOver() {
+
+    }
+
+    calcDelta(timestamp) {
+        this.delta = timestamp - this.lastFrameTimeMs;
+        this.lastFrameTimeMs = timestamp;
+    }
+}
+
+function runOnLoad() {
+    const canvas = document.getElementById("canvas");
+    if (canvas.getContext) {
+        const ctx = canvas.getContext("2d");
+        const game = new GameObject(ctx);
+        const cacti = new CactusObject(ctx, canvas);
+        const player = new PlayerObject(ctx);
+        const enemy = new EnemyObject(ctx, canvas);
+
+        setInterval(function () {
+                fps = framesPerSecond;
+                framesPerSecond = 0;
+            },
+            1000
+        );
+        
+        function mainLoop(timestamp) {
+            if (timestamp < game.lastFrameTimeMs + (1000 / maxFPS)) {
+                requestAnimationFrame(mainLoop);
+                return;
             }
+
+            game.calcDelta(timestamp);
+            game.resetGameWindow(canvas);
+            cacti.update(game.delta);
+            player.update(game.delta, keyInputs);
+            enemy.update(game.delta);
+
+            requestAnimationFrame(mainLoop);
         }
-
-        function mainLoop() {
-            resetGameWindow();
-            spawnCacti();
-            drawCactus();
-            drawPlayer();
-
-            // Control Game FPS
-            setTimeout(function() {
-                mainLoop();
-            }, 1000/maxFPS);
-        }
-
+        
         requestAnimationFrame(mainLoop);
     }
 }
+
+window.onload = runOnLoad;

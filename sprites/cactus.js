@@ -6,8 +6,8 @@ export function Cactus(canvas, x, y, scale = 1) {
     this.x = x;
     this.y = y;
     this.armAngle = 0;
-    this.armTilt = 0.5;
-    this.velocity=2.5;
+    this.armTilt = 0.03;
+    this.velocity=0.2;
 }
 
 Cactus.prototype.ratio = function (value) {
@@ -63,39 +63,22 @@ Cactus.prototype.arms = function (){
     this.canvas.restore();
 }
 
-Cactus.prototype.update = function (angle) {
+Cactus.prototype.update = function ( delta) {
     const canvas = document.getElementById("canvas");
     
-    this.armAngle+=this.armTilt;
+    this.armAngle+=this.armTilt*delta;
     
     if (this.armAngle>15 && this.armAngle>0){
-        this.armTilt=-0.5;
+        this.armTilt=-0.03;
     }
     
     if(this.armAngle<-15 && this.armAngle<0){
-        this.armTilt=0.5;
+        this.armTilt=0.03;
     }
-    
-    if (angle===0){
-        this.y+=this.velocity;
-        if (this.y>canvas.height+60){
-            return -1;
-        }
-    }else if (angle===90){
-        this.x-=this.velocity
-        if (this.x<-60){
-            return -1;
-        }
-    }else if (angle===180){
-        this.y-=this.velocity;
-        if (this.y<-60){
-            return -1;
-        }
-    }else if (angle===270){
-        this.x+=this.velocity;
-        if (this.x>canvas.width+50){
-            return -1;
-        }
+
+    this.y+=this.velocity*delta;
+    if (this.y>canvas.height+60){
+        return -1;
     }
     return null;
 }
