@@ -1,4 +1,4 @@
-import {enemies} from "./commons.js";
+import {enemies, missiles, updateEnemies} from "./commons.js";
 import {Helicopter} from "../sprites/helicopter.js";
 import {getRandom} from "../constants/helper.js";
 
@@ -20,12 +20,25 @@ export class EnemyObject {
 
     update(delta) {
         for (let enemy of enemies) {
+            this.checkCollision(enemy);
             const result = enemy.update(delta);
             if (result != null && result === -1) {
-                enemies = enemies.slice(1, enemies.length);
+                updateEnemies(enemies.slice(1, enemies.length));
                 continue;
             }
             enemy.draw();
         }
     }
+    
+    checkCollision(enemy){
+        for (let missile in missiles){
+            if ((missile.x<enemy.x-20 && missile.x>enemy.x+20) && missile.y<enemy.y-10){
+                missile.hit = true;
+                enemy.hit = true;
+                console.log('hit');
+                break;
+            }
+        }
+    }
+    
 }

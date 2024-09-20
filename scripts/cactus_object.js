@@ -1,4 +1,4 @@
-import {cacti} from "./commons.js";
+import {cacti, updateCacti} from "./commons.js";
 import {Cactus} from "../sprites/cactus.js";
 import {getRandom} from "../constants/helper.js";
 
@@ -20,7 +20,7 @@ export class CactusObject {
         for (let cactus of cacti) {
             const result = cactus.update(delta);
             if (result != null && result === -1) {
-                cacti = cacti.slice(1, cacti.length);
+                updateCacti(cacti.slice(1, cacti.length));
                 continue;
             }
             cactus.draw();

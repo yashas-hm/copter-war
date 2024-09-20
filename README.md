@@ -9,8 +9,6 @@ designed to help beginners understand the basics of game engines and game design
 Check out the game in action!
 [Copter War](https://yashas-hm.github.io/copter-war/)
 
-#### Just Basic Demo still lots to add
-
 ![ScreenRecording2024-09-13at1 42 16PM-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/bb6b63c5-f354-4808-81a1-b230a60768c0)
 
 ## Features
@@ -22,13 +20,13 @@ Check out the game in action!
   and movement patterns.
 - **Random Cacti Spawning**: Randomly generated cacti appear in the desert to enhance the environment and increase the
   challenge.
-
-#### TODO
-
 - **Enemy Helicopters**: Enemy helicopters move on their own and appear at random intervals.
-- **Collision Detection**: Detect collisions between bullets and enemy helicopters.
-- **Score System**: Earn points by shooting down enemy helicopters.
-- **Game Over**: The game ends when the player is hit by an enemy helicopter.
+
+[//]: # (- **Collision Detection**: Detect collisions between bullets and enemy helicopters.)
+
+[//]: # (- **Score System**: Earn points by shooting down enemy helicopters.)
+
+[//]: # (- **Game Over**: The game ends when the player is hit by an enemy helicopter.)
 
 ## How It Works
 
@@ -39,14 +37,9 @@ The game uses the **HTML Canvas** for rendering and **JavaScript** for logic, ut
   classes.
 - **Random Spawning**: Cacti are spawned randomly on the canvas to create a dynamic desert environment.
 - **Game Loop**: A continuous loop that updates the game state and redraws the game canvas at a fixed interval.
-
-#### TODO
-
 - **Event Handling**: Controls for the player helicopter using keyboard events for movement and shooting.
-
-## TODO
 
 ## Controls
 
 - **Arrow Keys**: Move the helicopter up, down, left, and right.
-- **Spacebar**: Shoot bullets at enemy helicopters.
+- **Spacebar**: Shoot missiles at enemy helicopters.

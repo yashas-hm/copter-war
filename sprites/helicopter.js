@@ -1,7 +1,8 @@
 import {borderBlack, borderWhite, enemyPri, enemySec, playerPri, playerSec} from "../constants/colors.js"
 
 export function Helicopter(
-    canvas, x = 0,
+    canvas, 
+    x = 0,
     y = 0,
     scale = 1,
     isEnemy = false,
@@ -104,6 +105,7 @@ Helicopter.prototype.drawBody = function (primaryColor, secondaryColor) {
     this.canvas.strokeStyle = borderWhite;
     this.canvas.fillStyle = secondaryColor;
     this.canvas.beginPath();
+    
     this.canvas.moveTo(this.ratio(-20), this.ratio(50));
     this.canvas.lineTo(this.ratio(20), this.ratio(50));
     this.canvas.lineTo(this.ratio(20), this.ratio(80));

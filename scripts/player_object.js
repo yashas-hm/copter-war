@@ -10,5 +10,4 @@ export class PlayerObject {
         this.player.update(delta, input);
         this.player.draw();
     }
-
 }

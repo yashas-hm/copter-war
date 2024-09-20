@@ -4,14 +4,23 @@ import {runOnLoad} from "./constants/helper.js";
 // Process Inputs
 window.addEventListener("keydown", function (event) {
     if (event.defaultPrevented) return;
-    keyInputs[event.key] = true;
+    console.log(event.key);
+    if (event.key===" "){
+        keyInputs["Space"] = true;
+    }else{
+        keyInputs[event.key] = true;
+    }
     event.preventDefault();
 }, true);
 
 window.addEventListener("keyup", function (event) {
     if (event.defaultPrevented) return;
-    keyInputs[event.key] = false;
+    if (event.key===" "){
+        keyInputs["Space"] = false;
+    }else{
+        keyInputs[event.key] = false;   
+    }
     event.preventDefault();
-}, true)
+}, true);
 
 window.onload = runOnLoad;
