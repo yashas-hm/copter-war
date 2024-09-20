@@ -9,6 +9,8 @@ designed to help beginners understand the basics of game engines and game design
 Check out the game in action!
 [Copter War](https://yashas-hm.github.io/copter-war/)
 
+![Screen Recording 2024-09-20 at 7 15 25 PM](https://github.com/user-attachments/assets/5df74940-63af-4d02-8e6b-8b1ab0d65613)
+
 ![ScreenRecording2024-09-13at1 42 16PM-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/bb6b63c5-f354-4808-81a1-b230a60768c0)
 
 ## Features
